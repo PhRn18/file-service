@@ -3,6 +3,7 @@ package com.project.fileservice.Service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.project.fileservice.Model.DownloadDTO;
+import com.project.fileservice.Model.FileDTO;
 import com.project.fileservice.Utils.CreateS3ObjectSummaryInstance;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +64,7 @@ class FileServiceTest {
     }
 
     @Test
-    void downloadS3Object() throws IOException {
+    void downloadS3Object() {
         String key = "Captura_de_tela_de_2023-03-09_14-54-21.png";
         InputStream inputStream = new ByteArrayInputStream("foo".getBytes());
         S3Object s3Object = new S3Object();
@@ -77,10 +78,19 @@ class FileServiceTest {
     }
 
     @Test
-    void saveItem() {
+    void saveItem() throws IOException {
+        String filename="foo_file.pdf";
+        Long contentLength = 132213L;
+        InputStream inputStream = new ByteArrayInputStream(filename.getBytes());
+        FileDTO fileDTO = new FileDTO();
+        fileDTO.setFileName(filename);
+        fileDTO.setContentLength(contentLength);
+        fileDTO.setInputStream(inputStream.readAllBytes());
+        fileDTO.setContentType("pdf");
+
+        given(s3client.putObject(bucketName,filename,inputStream,new ObjectMetadata())).willReturn(null);
+        boolean uploadResult = fileService.saveItem(fileDTO, bucketName);
+        assertThat(uploadResult).isTrue();
     }
 
-    @Test
-    void deleteItem() {
-    }
 }

@@ -56,15 +56,16 @@ public class FileService {
             throw new S3ConnectionError("Nao foi possivel se conectar a AWS e realizar o download do objeto");
         }
     }
-    public boolean saveItem(FileDTO fileDTO){
+    public boolean saveItem(FileDTO fileDTO,String overrideBucketName){
         log.info("Salvando item na bucket...");
+        String uploadBucketName = overrideBucketName!=null?overrideBucketName:bucketName;
         try{
             ObjectMetadata data = new ObjectMetadata();
             data.setContentType(fileDTO.getContentType());
             data.setContentLength(fileDTO.getContentLength());
             InputStream inputStream = new ByteArrayInputStream(fileDTO.getInputStream());
             String fileName = fileDTO.getFileName();
-            s3client.putObject(bucketName,fileName, inputStream,data);
+            s3client.putObject(uploadBucketName,fileName, inputStream,data);
             return true;
         }
         catch (Exception e){

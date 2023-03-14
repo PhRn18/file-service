@@ -36,7 +36,7 @@ public class FileController {
     public ResponseEntity<Boolean> saveItem(@RequestBody FileDTO fileDTO){
         log.info("Salvando arquivo na bucket...");
         return ResponseEntity
-                .ok(fileService.saveItem(fileDTO));
+                .ok(fileService.saveItem(fileDTO,null));
     }
     @DeleteMapping
     public ResponseEntity<?> deleteItem(@RequestParam String key){
