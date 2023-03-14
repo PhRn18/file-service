@@ -30,7 +30,7 @@ public class FileController {
                     .badRequest()
                     .build();
         }
-        return ResponseEntity.ok(fileService.downloadS3Object(key));
+        return ResponseEntity.ok(fileService.downloadS3Object(key,null));
     }
     @PostMapping
     public ResponseEntity<Boolean> saveItem(@RequestBody FileDTO fileDTO){

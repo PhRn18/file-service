@@ -45,10 +45,11 @@ public class FileService {
             throw new S3ConnectionError("Nao foi possivel se conectar a AWS e retornar a lista de objetos");
         }
     }
-    public DownloadDTO downloadS3Object(String key){
+    public DownloadDTO downloadS3Object(String key,String overrideBucketName){
         log.info("Baixando objeto da S3...");
+        String downloadBucketName = overrideBucketName!=null ? overrideBucketName:bucketName;
         try{
-            S3Object s3Response = s3client.getObject(bucketName, key);
+            S3Object s3Response = s3client.getObject(downloadBucketName, key);
             InputStream fileInputStream = s3Response.getObjectContent();
             return new DownloadDTO(fileInputStream.readAllBytes());
         }catch (Exception e){
