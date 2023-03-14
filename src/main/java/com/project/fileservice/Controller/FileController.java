@@ -17,6 +17,12 @@ public class FileController {
     public FileController(FileService fileService){
         this.fileService=fileService;
     }
+    @GetMapping("/ok")
+    public ResponseEntity<?> isFileControllerOnline(){
+        return ResponseEntity
+                .ok()
+                .build();
+    }
     @GetMapping
     public ResponseEntity<List<S3ObjectSummary>> listBucketItems(){
         return ResponseEntity.ok(fileService.listBucketItems());
